@@ -7,6 +7,7 @@ author: Michal Czaplinski
 email: mmczaplinski@gmail.com
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 import json
 import re
 import difflib
@@ -18,7 +19,6 @@ if sys.version_info >= (3, 0):
     from urllib.parse import urljoin
     from urllib.request import urlopen
     from urllib.request import Request
-    unicode = str
 else:
     from urllib2 import urlopen, Request
     from urlparse import urljoin
@@ -36,7 +36,7 @@ def replace_breaks(html):
     return html
 
 
-class Review:
+class Review(object):
     """
     Class representing the fetched review.
     Includes methods for getting the score, the text of the review
@@ -189,14 +189,15 @@ def search(artist, album):
                       data=None,
                       headers={'User-Agent': 'michalczaplinski/pitchfork-v0.1'})
     response = urlopen(request)
-    text = response.read().decode('UTF-8').split('window.App=')[1].split(';</script>')[0]
+    text = response.read().split('window.App=')[1].split(';</script>')[0]
 
     # the server responds with json so we load it into a dictionary
     obj = json.loads(text)
 
     try:
         # get the nested dictionary containing url to the review and album name
-        review_dict = obj['context']['dispatcher']['stores']['SearchStore']['results']['albumreviews']['items'][0]
+        review_dict = obj['context']['dispatcher']['stores']['SearchStore']['results']\
+            ['albumreviews']['items'][0]
     except IndexError:
         raise IndexError('The search returned no results! Try again with diferent parameters.')
 
