@@ -30,11 +30,9 @@ CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE
 SOFTWARE.
 """
 
+from __future__ import absolute_import, division, print_function, unicode_literals
 import sys
 
 __version__ = "0.1.5"
 
-if sys.version_info >= (3, 0):
-    from pitchfork.pitchfork import search
-else:
-    from pitchfork import search
+from pitchfork.pitchfork import search
