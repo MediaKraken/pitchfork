@@ -174,12 +174,10 @@ def search(artist, album):
     request = Request(url='http://pitchfork.com/search/?query=' + query,
                       data=None,
                       headers={'User-Agent': 'michalczaplinski/pitchfork-v0.1'})
-    response = urlopen(request)
-    text = response.read().split('window.App=')[1].split(';</script>')[0]
+    text = urlopen(request).read().split('window.App=')[1].split(';</script>')[0]
 
     # the server responds with json so we load it into a dictionary
     obj = json.loads(text)
-
     try:
         # get the nested dictionary containing url to the review and album name
         review_dict = obj['context']['dispatcher']['stores']['SearchStore']['results']\
@@ -195,18 +193,15 @@ def search(artist, album):
     request = Request(url=full_url,
                       data=None,
                       headers={'User-Agent': 'michalczaplinski/pitchfork-v0.1'})
-    response_text = urlopen(request).read()
-    soup = BeautifulSoup(response_text, "lxml")
+    soup = BeautifulSoup(urlopen(request).read(), "lxml")
 
     # check if the review does not review multiple albums
     if soup.find(class_='review-multi') is None:
         matched_album = review_dict['title']
-
         return Review(artist, album, matched_artist, matched_album, query, url, soup)
     else:
         # get the titles of all the albums in the multi-review
         titles = [title.get_text() for title in soup.find(class_='review-meta').find_all('h2')]
-
         try:
             # find the album title closest matching to the one searched for
             matched_album = difflib.get_close_matches(album, titles, cutoff=0.1)[0]
