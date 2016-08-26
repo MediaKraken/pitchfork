@@ -1,4 +1,5 @@
-from pitchfork.pitchfork import search, Review, MultiReview
+from __future__ import absolute_import, division, print_function, unicode_literals
+from pitchfork.pitchfork import search, Review
 import json
 import unittest
 
@@ -28,10 +29,12 @@ class TestReview(unittest.TestCase):
         self.assertEqual(self.review.score(), 8.3)
 
     def test_editorial(self):
-        self.assertTrue(self.review.editorial().startswith('Though few of their songs contain actual words'))
+        self.assertTrue(self.review.editorial().startswith(\
+            'Though few of their songs contain actual words'))
 
     def test_review_url(self):
-        self.assertEqual(self.review.url, '/reviews/albums/19466-mogwai-come-on-die-young-deluxe-edition/')
+        self.assertEqual(self.review.url,\
+            '/reviews/albums/19466-mogwai-come-on-die-young-deluxe-edition/')
 
     def test_review_to_json(self):
         input_dict = self.review._json_safe_dict()
