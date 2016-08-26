@@ -56,9 +56,7 @@ class Review(object):
 
     def score(self):
         """ Returns the album score. """
-        rating = self.soup.find(class_='score').text
-        rating = float(rating.strip())
-        return rating
+        return float(self.soup.find(class_='score').text.strip())
 
     def editorial(self):
         """ Returns the text of the review. """
@@ -66,24 +64,19 @@ class Review(object):
 
     def cover(self):
         """ Returns the link to the album cover. """
-        artwork = self.soup.find(class_='artwork')
-        image_link = artwork.img['src'].strip()
-        return image_link
+        return self.soup.find(class_='artwork').img['src'].strip()
 
     def artist(self):
         """ Returns the artist name that pitchfork matched to our search. """
-        artist = self.matched_artist.strip()
-        return artist
+        return self.matched_artist.strip()
 
     def album(self):
         """ Returns the album name that pitchfork matched to our search. """
-        album = self.matched_album.strip()
-        return album
+        return self.matched_album.strip()
 
     def label(self):
         """ Returns the name of the record label that released the album. """
-        label = self.soup.find(class_='label-list').get_text()
-        return label
+        return self.soup.find(class_='label-list').get_text()
 
     def year(self):
         """
@@ -91,8 +84,7 @@ class Review(object):
         In case of a reissue album, the year of original release as well as
         the year of the reissue is given separated by '/'.
         """
-        year = self.soup.find(class_='year').contents[1].get_text()
-        return year
+        return self.soup.find(class_='year').contents[1].get_text()
 
     def _json_safe_dict(self):
         """
@@ -107,8 +99,7 @@ class Review(object):
         """
         Returns the attributes of the album review formatted as json.
         """
-        d = self._json_safe_dict()
-        return json.dumps(d)
+        return json.dumps(self._json_safe_dict())
 
     def __repr__(self):
         return self.__class__.__name__+repr((self.searched_artist,
@@ -135,9 +126,7 @@ class MultiReview(Review):
 
     def score(self):
         """ Returns the album score. """
-        rating = self.info.find(class_='score').text
-        rating = float(rating.strip())
-        return rating
+        return float(self.info.find(class_='score').text.strip())
 
     def label(self):
         """ Returns the name of the record label that released the album. """
@@ -147,9 +136,7 @@ class MultiReview(Review):
 
     def cover(self):
         """ Returns the link to the album cover. """
-        artwork = self.info.parent.find(class_='artwork')
-        image_link = artwork.img['src']
-        return image_link
+        return self.info.parent.find(class_='artwork').img['src']
 
     def year(self):
         """
@@ -172,8 +159,7 @@ class MultiReview(Review):
         return d
 
     def to_json(self):
-        d = self._json_safe_dict()
-        return json.dumps(d)
+        return json.dumps(self._json_safe_dict())
 
 def search(artist, album):
     """
