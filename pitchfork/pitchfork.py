@@ -13,6 +13,7 @@ import re
 import difflib
 import sys
 from bs4 import BeautifulSoup
+import requests
 
 
 if sys.version_info >= (3, 0):
